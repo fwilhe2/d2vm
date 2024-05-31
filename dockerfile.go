@@ -35,11 +35,15 @@ var alpineDockerfile string
 //go:embed templates/centos.Dockerfile
 var centOSDockerfile string
 
+//go:embed templates/wolfi.Dockerfile
+var wolfiDockerfile string
+
 var (
 	ubuntuDockerfileTemplate = template.Must(template.New("ubuntu.Dockerfile").Parse(ubuntuDockerfile))
 	debianDockerfileTemplate = template.Must(template.New("debian.Dockerfile").Parse(debianDockerfile))
 	alpineDockerfileTemplate = template.Must(template.New("alpine.Dockerfile").Parse(alpineDockerfile))
 	centOSDockerfileTemplate = template.Must(template.New("centos.Dockerfile").Parse(centOSDockerfile))
+	wolfiDockerfileTemplate  = template.Must(template.New("wolfi.Dockerfile").Parse(wolfiDockerfile))
 )
 
 type NetworkManager string
@@ -103,6 +107,9 @@ func NewDockerfile(release OSRelease, img, password string, networkManager Netwo
 		if networkManager != "" && networkManager != NetworkManagerNone {
 			return Dockerfile{}, fmt.Errorf("network manager is not supported on centos")
 		}
+	case ReleaseWolfi:
+		d.tmpl = wolfiDockerfileTemplate
+		net = NetworkManagerNone
 	default:
 		return Dockerfile{}, fmt.Errorf("unsupported distribution: %s", release.ID)
 	}

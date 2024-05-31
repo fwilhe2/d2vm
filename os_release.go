@@ -32,6 +32,7 @@ const (
 	ReleaseCentOS Release = "centos"
 	ReleaseRHEL   Release = "rhel"
 	ReleaseKali   Release = "kali"
+	ReleaseWolfi  Release = "wolfi"
 )
 
 type Release string
